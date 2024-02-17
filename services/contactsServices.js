@@ -1,4 +1,4 @@
-import Contact from "../models/Contact";
+import Contact from "../models/Contact.js";
 
 export const contactsList = () => Contact.find({}, "-createdAt -updatedAt");
 
@@ -12,3 +12,8 @@ export const addContact = async (data) => Contact.create(data);
 
 export const updateContactById = async (id, data) =>
   Contact.findByIdAndUpdate(id, data);
+
+export const updateStatusContact = async (id, data) =>
+  Contact.findByIdAndUpdate(id, data, {
+    new: true,
+  });
