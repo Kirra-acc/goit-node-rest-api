@@ -2,6 +2,8 @@ import { Schema, model } from "mongoose";
 
 import { handleSaveError, setUpdateSetting } from "./hooks.js";
 
+import gravatar from 'gravatar';
+
 const contactsSchema = new Schema(
   {
     name: {
@@ -15,6 +17,12 @@ const contactsSchema = new Schema(
     phone: {
       type: String,
       required: true,
+    },
+    avatarUrl: {
+      type: String,
+      default: function () {
+        return gravatar.url(this.email, { s: "200", d: "identicon" }, true);
+      },
     },
     owner: {
       type: Schema.Types.ObjectId,
