@@ -1,8 +1,14 @@
+// import fs from "fs/promises";
+// import path from "path";
+import gravatar from 'gravatar';
+
 import * as contactsService from "../services/contactsServices.js";
 
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 
 import HttpError from "../helpers/HttpError.js";
+
+// const avatarsDir = path.resolve("public", "avatars");
 
 export const getAllContacts = async (req, res) => {
   const { _id: owner } = req.user;
@@ -42,7 +48,19 @@ export const deleteContact = async (req, res) => {
 
 export const createContact = async (req, res) => {
   const { _id: owner } = req.user;
-  const result = await contactsService.addContact({ ...req.body, owner });
+
+  // const { path: oldPath, filename } = req.file;
+  // const newPath = path.join(avatarsDir, filename);
+  // await fs.rename(oldPath, newPath);
+  // const avatarUrl = path.join("avatars", filename);
+
+  const avatarUrl = gravatar.url(email, { s: "200", d: "identicon" }, true);
+
+  const result = await contactsService.addContact({
+    ...req.body,
+    avatarUrl,
+    owner,
+  });
 
   res.status(201).json(result);
 };
