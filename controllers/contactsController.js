@@ -19,7 +19,7 @@ export const getAllContacts = async (req, res) => {
     { skip, limit }
   );
   const total = await contactsService.getContactsCountByFilter({ owner });
-  res.json(total, result);
+  res.json({total, result});
 };
 
 export const getOneContact = async (req, res) => {
@@ -49,12 +49,15 @@ export const deleteContact = async (req, res) => {
 export const createContact = async (req, res) => {
   const { _id: owner } = req.user;
 
-  // const { path: oldPath, filename } = req.file;
-  // const newPath = path.join(avatarsDir, filename);
-  // await fs.rename(oldPath, newPath);
-  // const avatarUrl = path.join("avatars", filename);
+  const { path: oldPath, filename } = req.file;
+  const newPath = path.join(avatarsDir, filename);
+  await fs.rename(oldPath, newPath);
+  const avatarUrl = path.join("avatars", filename);
 
-  const avatarUrl = gravatar.url(email, { s: "200", d: "identicon" }, true);
+
+
+  //treba
+  // const avatarUrl = gravatar.url(email, { s: "200", d: "identicon" }, true);
 
   const result = await contactsService.addContact({
     ...req.body,

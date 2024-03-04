@@ -13,7 +13,7 @@ const { JWT_SECRET } = process.env;
 
 const signup = async (req, res) => {
   const { email } = req.body;
-  const user = await authServices.findUser({ email });
+  const user = await userServices.findUser({ email });
   if (user) {
     throw HttpError(409, "Email in use");
   }
