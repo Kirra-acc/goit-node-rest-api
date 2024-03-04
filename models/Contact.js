@@ -20,9 +20,9 @@ const contactsSchema = new Schema(
     },
     avatarUrl: {
       type: String,
-      default: function () {
-        return gravatar.url(this.email, { s: "200", d: "identicon" }, true);
-      },
+      // default: function () {
+      //   return gravatar.url(this.email, { s: "200", d: "identicon" }, true);
+      // },
     },
     owner: {
       type: Schema.Types.ObjectId,
