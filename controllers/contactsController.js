@@ -1,6 +1,7 @@
-// import fs from "fs/promises";
-// import path from "path";
-import gravatar from 'gravatar';
+import fs from "fs/promises";
+import path from "path";
+// import gravatar from "gravatar";
+// import jimp from "jimp";
 
 import * as contactsService from "../services/contactsServices.js";
 
@@ -9,6 +10,7 @@ import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import HttpError from "../helpers/HttpError.js";
 
 // const avatarsDir = path.resolve("public", "avatars");
+const contactsDir = path.resolve("public", "contacts");
 
 export const getAllContacts = async (req, res) => {
   const { _id: owner } = req.user;
@@ -19,7 +21,7 @@ export const getAllContacts = async (req, res) => {
     { skip, limit }
   );
   const total = await contactsService.getContactsCountByFilter({ owner });
-  res.json({total, result});
+  res.json({ total, result });
 };
 
 export const getOneContact = async (req, res) => {
@@ -50,13 +52,11 @@ export const createContact = async (req, res) => {
   const { _id: owner } = req.user;
 
   const { path: oldPath, filename } = req.file;
-  const newPath = path.join(avatarsDir, filename);
+  const newPath = path.join(contactsDir, filename);
   await fs.rename(oldPath, newPath);
-  const avatarUrl = path.join("avatars", filename);
 
+  const avatarUrl = path.join("contacts", filename);
 
-
-  //treba
   // const avatarUrl = gravatar.url(email, { s: "200", d: "identicon" }, true);
 
   const result = await contactsService.addContact({
@@ -67,6 +67,22 @@ export const createContact = async (req, res) => {
 
   res.status(201).json(result);
 };
+
+// export const updateAvatar = async (req, res) => {
+//   const { _id } = req.user;
+//   const { path: oldPath, filename } = req.file;
+//   const newPath = path.join(avatarsDir, filename);
+
+//   await fs.rename(oldPath, newPath);
+
+//   await jimp.read(newPath).resize(250, 250).writeAsync(newPath);
+
+//   const avatarUrl = `/avatars/${filename}`;
+
+//   await contactsService.updateContactByFilter({ _id }, { avatarUrl });
+
+//   res.json({ avatarUrl });
+// };
 
 export const updateContact = async (req, res) => {
   const { id } = req.params;
@@ -99,4 +115,5 @@ export default {
   createContact: ctrlWrapper(createContact),
   updateContact: ctrlWrapper(updateContact),
   updateFavorite: ctrlWrapper(updateFavorite),
+  // updateAvatar: ctrlWrapper(updateAvatar),
 };
