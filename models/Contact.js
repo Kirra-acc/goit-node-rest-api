@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 import { handleSaveError, setUpdateSetting } from "./hooks.js";
 
-import gravatar from 'gravatar';
+// import gravatar from 'gravatar';
 
 const contactsSchema = new Schema(
   {
